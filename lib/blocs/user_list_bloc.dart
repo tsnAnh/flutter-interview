@@ -257,6 +257,8 @@ class UserListBloc extends HydratedBloc<UserListEvent, UserListState> {
         isLoading: false,
         users: [],
         errorMessage: searchEmptyMessage,
+        isSearching: true,
+        searchQuery: query,
       ),
     );
   }
@@ -350,12 +352,12 @@ class UserListBloc extends HydratedBloc<UserListEvent, UserListState> {
 
   void _emitEmptyState(Emitter<UserListState> emit, UsersResponse data) {
     String emptyMessage;
+    bool isSearching = state.isSearching;
+    String? searchQuery = state.searchQuery;
 
-    if (state.isSearching &&
-        state.searchQuery != null &&
-        state.searchQuery!.isNotEmpty) {
+    if (isSearching && searchQuery != null && searchQuery.isNotEmpty) {
       emptyMessage =
-          'No users found matching "${state.searchQuery}".\nTry adjusting your search criteria or check the spelling.';
+          'No users found matching "$searchQuery".\nTry adjusting your search criteria or check the spelling.';
     } else {
       emptyMessage =
           'No users available at the moment.\nPlease check back later or try refreshing the page.';
@@ -373,6 +375,8 @@ class UserListBloc extends HydratedBloc<UserListEvent, UserListState> {
         currentPage: data.page,
         isFromCache: false,
         errorMessage: emptyMessage,
+        isSearching: isSearching,
+        searchQuery: searchQuery,
       ),
     );
   }

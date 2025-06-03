@@ -20,13 +20,20 @@ class UserEmptyStateWidget extends StatelessWidget {
         Color iconColor;
         List<Widget> actionButtons = [];
 
-        if (state.isSearching &&
-            state.searchQuery != null &&
-            state.searchQuery!.isNotEmpty) {
+        // Check if we have an error message that indicates search results
+        final bool isSearchEmptyState =
+            state.errorMessage?.contains('No users found matching') == true ||
+            (state.isSearching &&
+                state.searchQuery != null &&
+                state.searchQuery!.isNotEmpty);
+
+        if (isSearchEmptyState) {
           // Search-specific empty state
           title = 'No Results Found';
           subtitle =
-              'No users found matching "${state.searchQuery}".\nTry adjusting your search criteria or check the spelling.';
+              state.errorMessage?.isNotEmpty == true
+                  ? state.errorMessage!
+                  : 'No users found matching "${state.searchQuery}".\nTry adjusting your search criteria or check the spelling.';
           icon = CupertinoIcons.search;
           iconColor = CupertinoColors.systemBlue.resolveFrom(context);
 
@@ -41,7 +48,9 @@ class UserEmptyStateWidget extends StatelessWidget {
           // General empty state
           title = 'No Users Available';
           subtitle =
-              'No users are available at the moment.\nPlease check back later or try refreshing.';
+              state.errorMessage?.isNotEmpty == true
+                  ? state.errorMessage!
+                  : 'No users are available at the moment.\nPlease check back later or try refreshing.';
           icon = CupertinoIcons.person_3;
           iconColor = CupertinoColors.systemGrey.resolveFrom(context);
 
@@ -85,11 +94,9 @@ class UserEmptyStateWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
 
-                // Subtitle with custom message or from state
+                // Subtitle
                 Text(
-                  state.errorMessage?.isNotEmpty == true
-                      ? state.errorMessage!
-                      : subtitle,
+                  subtitle,
                   style: CupertinoTheme.of(
                     context,
                   ).textTheme.textStyle.copyWith(
