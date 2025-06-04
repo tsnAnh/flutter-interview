@@ -24,12 +24,6 @@ This app demonstrates modern Flutter development practices including:
 - **Loading States**: Smooth loading indicators and skeleton screens
 - **Infinite Scroll**: Automatic loading of more users as you scroll
 
-## Screenshots
-
-| User List | User Details | Search |
-|-----------|--------------|---------|
-| ![User List](screenshots/user_list.png) | ![User Details](screenshots/user_details.png) | ![Search](screenshots/search.png) |
-
 ## Architecture
 
 ### Project Structure
